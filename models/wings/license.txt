@@ -1,0 +1,9 @@
+Model Information:
+* title:	wings
+* source:	https://poly.pizza/m/dw-IMS0xk71
+* author:	Michael Fuchs
+
+Model License:
+* license type:	CC-BY-3.0 (https://creativecommons.org/licenses/by/3.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+* modifications:	repainted gold, attached to the back of a lion model.

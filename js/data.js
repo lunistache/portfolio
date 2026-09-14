@@ -166,6 +166,31 @@ export const BODIES = [
         cvLink: "https://lunistache.github.io/bleuefrog/",
         linkLabel: "Visit website ↗",
       },
+      {
+        name: "Panzon",
+        radius: 0.32,
+        orbitRadius: 4.4,
+        orbitSpeed: 0.22,
+        rotationSpeed: 0.02,
+        orbitTilt: 0.2, // ~11°
+        // the winged lion of Venice, like the Panzon logo: "Lion" by jeremy
+        // and "wings" by Michael Fuchs, both CC BY 3.0 (see models/*/license.txt
+        // and the credit in index.html), made chubbier and repainted gold
+        model: {
+          parts: [
+            { file: "models/lion/lion.glb", stretch: [1.6, 1, 1] },
+            { file: "models/wings/wings.glb", scale: 0.075, position: [0, 4.8, 0.3], rotationY: Math.PI }, // curving forward, a little behind the mane
+          ],
+          recolor: {
+            DD9944: "#e0a84a", // body
+            FF5722: "#a86a24", // mane
+            lambert2SG: "#f2d58a", // wing feathers
+            lambert3SG: "#d9b060",
+            lambert5SG: "#b8903f",
+          },
+        },
+        facts: "Panzon. Italian food from Venice.\nTiramisu to order and pasta-making classes.",
+      },
     ],
   },
 ];

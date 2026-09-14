@@ -13,7 +13,7 @@ import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 // the same targetRadius drops into all the existing radius-based math
 // (label height, hit-sphere size, camera framing).
 //
-// `model` is either { file } or { parts: [{ file, scale, position, rotationY }] }
+// `model` is either { file } or { parts: [{ file, scale, stretch, position, rotationY }] }
 // — parts are placed in the first file's raw units, then the whole
 // composition is merged and normalized together, so several props (e.g. a
 // laptop and a phone) read and behave as one object.
@@ -34,7 +34,8 @@ export async function loadModelMesh(model, targetRadius) {
     const placement = new THREE.Matrix4().compose(
       new THREE.Vector3(...(part.position || [0, 0, 0])),
       new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), part.rotationY || 0),
-      new THREE.Vector3().setScalar(part.scale || 1)
+      // `stretch` scales a part per axis on top of `scale` (e.g. a chubbier lion)
+      new THREE.Vector3(...(part.stretch || [1, 1, 1])).multiplyScalar(part.scale || 1)
     );
     gltf.scene.updateMatrixWorld(true);
     gltf.scene.traverse((obj) => {

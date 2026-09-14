@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CSS2DRenderer, CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
-import { BODIES, DWARF_BODIES } from "./data.js?v=6";
+import { BODIES, DWARF_BODIES } from "./data.js?v=9";
 import { getBodyTextures, getRingTexture, getMoonTexture } from "./textures.js";
 import { createStarfield, ShootingStars } from "./starfield.js";
-import { loadModelMesh } from "./models.js?v=2";
+import { loadModelMesh } from "./models.js?v=3";
 import { pauseMusic, resumeMusic } from "./music.js?v=5";
 
 const ALL_BODIES = [...BODIES, ...DWARF_BODIES];

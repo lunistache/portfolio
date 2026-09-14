@@ -1,0 +1,9 @@
+Model Information:
+* title:	Lion
+* source:	https://poly.pizza/m/cC_IFclYA4c
+* author:	jeremy
+
+Model License:
+* license type:	CC-BY-3.0 (https://creativecommons.org/licenses/by/3.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+* modifications:	made wider, body and mane repainted gold, combined with wings.
