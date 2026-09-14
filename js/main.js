@@ -1,11 +1,11 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CSS2DRenderer, CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
-import { BODIES, DWARF_BODIES } from "./data.js";
+import { BODIES, DWARF_BODIES } from "./data.js?v=6";
 import { getBodyTextures, getRingTexture, getMoonTexture } from "./textures.js";
 import { createStarfield, ShootingStars } from "./starfield.js";
-import { loadModelMesh } from "./models.js";
-import { pauseMusic, resumeMusic } from "./music.js?v=4";
+import { loadModelMesh } from "./models.js?v=2";
+import { pauseMusic, resumeMusic } from "./music.js?v=5";
 
 const ALL_BODIES = [...BODIES, ...DWARF_BODIES];
 
@@ -449,7 +449,7 @@ for (const body of ALL_BODIES) {
     moonPivot.add(moonOrbitLine);
     moonOrbitLines.push(moonOrbitLine);
 
-    const moonEntry = { pivot: moonPivot, speed: m.orbitSpeed, rotationSpeed: m.rotationSpeed || 0, hitMesh: moonHitMesh, mesh: moonMesh };
+    const moonEntry = { pivot: moonPivot, speed: m.orbitSpeed, rotationSpeed: m.rotationSpeed || 0, rotationSpeedX: m.rotationSpeedX || 0, leanToSun: m.leanToSun || 0, spinY: 0, hitMesh: moonHitMesh, mesh: moonMesh };
     moonEntries.push(moonEntry);
 
     focusables.set(moonId, {
@@ -1009,6 +1009,30 @@ speedSlider.addEventListener("input", (evt) => {
 
 const clock = new THREE.Clock();
 
+// Tilts a moon by `leanToSun` radians toward the Sun (at the world origin),
+// measured from true vertical in world space, so the planet's axial tilt and
+// the moon's orbit tilt don't change the angle. Recomputed every frame since
+// the Sun's direction changes as the moon and its planet orbit; the moon
+// still spins on that tilted axis (spinY).
+const _toSun = new THREE.Vector3();
+const _axis = new THREE.Vector3();
+const _up = new THREE.Vector3(0, 1, 0);
+const _tilt = new THREE.Quaternion();
+const _spin = new THREE.Quaternion();
+const _parentQuat = new THREE.Quaternion();
+function leanTowardSun(m) {
+  m.mesh.updateWorldMatrix(true, false);
+  m.mesh.getWorldPosition(_toSun).negate(); // Sun is at the origin
+  _toSun.y = 0; // only the horizontal direction matters for the lean
+  _axis.crossVectors(_up, _toSun);
+  if (_axis.lengthSq() < 1e-8) return;
+  _tilt.setFromAxisAngle(_axis.normalize(), m.leanToSun);
+  _spin.setFromAxisAngle(_up, m.spinY);
+  // world-space orientation, converted into the moon's parent (pivot) frame
+  m.pivot.getWorldQuaternion(_parentQuat).invert();
+  m.mesh.quaternion.copy(_parentQuat).multiply(_tilt).multiply(_spin);
+}
+
 function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
@@ -1037,7 +1061,14 @@ function animate() {
       if (!m.pivot.userData.paused) m.pivot.rotation.y += m.speed * dt * timeScale;
       // spins the moon on its own axis, same as a top-level body's mesh —
       // independent of the orbit pause, so it keeps spinning while focused
-      if (m.rotationSpeed) m.mesh.rotation.y += m.rotationSpeed * dt * 10 * timeScale;
+      if (m.leanToSun) {
+        m.spinY += m.rotationSpeed * dt * 10 * timeScale;
+        leanTowardSun(m);
+      } else if (m.rotationSpeed) {
+        m.mesh.rotation.y += m.rotationSpeed * dt * 10 * timeScale;
+      }
+      // optional tumble on X too (e.g. the clapperboard)
+      if (m.rotationSpeedX) m.mesh.rotation.x += m.rotationSpeedX * dt * 10 * timeScale;
     }
     if (entry.ringGroup) entry.ringGroup.rotation.y += 0.01 * dt * 10 * timeScale;
     if (entry.beltPoints) entry.beltPoints.rotation.y += 0.05 * dt * timeScale;

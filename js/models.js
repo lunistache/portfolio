@@ -61,6 +61,15 @@ export async function loadModelMesh(model, targetRadius) {
   const merged = mergeGeometries(mergeable, true);
   merged.computeVertexNormals();
   merged.center();
+  // `thicken` stretches the model along its thinnest axis only (e.g. a flat
+  // clapperboard that almost disappears when seen edge-on)
+  if (model.thicken) {
+    merged.computeBoundingBox();
+    const size = merged.boundingBox.getSize(new THREE.Vector3());
+    const s = [1, 1, 1];
+    s[[size.x, size.y, size.z].indexOf(Math.min(size.x, size.y, size.z))] = model.thicken;
+    merged.scale(...s);
+  }
   merged.computeBoundingSphere();
   const scale = targetRadius / merged.boundingSphere.radius;
   merged.scale(scale, scale, scale);

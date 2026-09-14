@@ -11,18 +11,29 @@ let ready = false;
 let started = false; // true once the song has really begun playing
 let suspended = false; // paused while another video plays in the modal
 
-// the "Music" volume slider in the bottom controls; 0 silences it
+// the "Music" volume slider in the bottom controls (0 silences it), and the
+// mute button next to it, which keeps the slider's volume for unmuting
 const slider = document.getElementById("volume-slider");
+const muteBtn = document.getElementById("mute-btn");
+let muted = false;
 
 function volume() {
   return parseInt(slider.value, 10);
 }
 
 function shouldPlay() {
-  return volume() > 0 && !suspended;
+  return !muted && volume() > 0 && !suspended;
+}
+
+function updateMuteBtn() {
+  const silent = muted || volume() === 0;
+  muteBtn.textContent = silent ? "🔇" : "🔊";
+  muteBtn.title = silent ? "Unmute" : "Mute";
+  muteBtn.setAttribute("aria-label", silent ? "Unmute music" : "Mute music");
 }
 
 function sync() {
+  updateMuteBtn();
   if (!ready) return;
   player.setVolume(volume());
   if (shouldPlay()) {
@@ -35,7 +46,21 @@ function sync() {
   }
 }
 
-slider.addEventListener("input", sync);
+slider.addEventListener("input", () => {
+  muted = false; // moving the slider means "I want to hear it"
+  sync();
+});
+
+muteBtn.addEventListener("click", () => {
+  if (volume() === 0) {
+    // muted by the slider being at 0: unmuting brings back a default level
+    slider.value = 10;
+    muted = false;
+  } else {
+    muted = !muted;
+  }
+  sync();
+});
 
 // every interaction retries playback until it has started
 function unlock() {

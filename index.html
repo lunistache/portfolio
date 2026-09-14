@@ -4,13 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nicola Fontaine - Portfolio</title>
+  <link id="favicon" rel="icon" type="image/png" href="logo/favicon-dark.png" />
+  <script>
+    // a random round logo variant each time the page is opened
+    (function () {
+      const variants = ["dark", "light", "tile"];
+      const pick = variants[Math.floor(Math.random() * variants.length)];
+      document.getElementById("favicon").href = "logo/favicon-" + pick + ".png";
+    })();
+  </script>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="style.css?v=18" />
+  <link rel="stylesheet" href="style.css?v=20" />
 </head>
 <body>
   <canvas id="scene"></canvas>
@@ -32,7 +42,7 @@
         <li><strong>The bar at the bottom</strong> sets the camera, the orbits, the music volume and the speed.</li>
       </ul>
       <button id="welcome-enter" type="button">Enter ♪</button>
-      <p id="welcome-note">This site plays music. Turn it down with the Music slider.</p>
+      <p id="welcome-note">This site plays music. Mute it or turn it down in the bar at the bottom.</p>
     </div>
   </div>
 
@@ -77,10 +87,13 @@
       <span class="control-label">Orbits</span>
       <input type="checkbox" id="orbits-toggle" class="switch" checked />
     </label>
-    <label class="control">
-      <span class="control-label">Music</span>
+    <div class="control">
+      <div class="control-row">
+        <label class="control-label" for="volume-slider">Music</label>
+        <button id="mute-btn" type="button" aria-label="Mute music" title="Mute">🔊</button>
+      </div>
       <input type="range" id="volume-slider" class="control-slider" min="0" max="100" step="1" value="10" autocomplete="off" />
-    </label>
+    </div>
     <label class="control">
       <span class="control-label">Speed</span>
       <input type="range" id="speed-slider" class="control-slider" min="0" max="3" step="0.25" value="1" />
@@ -148,6 +161,6 @@
       }
     }
   </script>
-  <script type="module" src="js/main.js?v=49"></script>
+  <script type="module" src="js/main.js?v=55"></script>
 </body>
 </html>

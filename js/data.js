@@ -58,10 +58,16 @@ export const BODIES = [
         orbitSpeed: 0.3,
         orbitTilt: -0.3, // ~-17°
         rotationSpeed: 0.04,
+        leanToSun: 0.52, // ~30° from vertical, top of the cassette leans toward the Sun
         // "Cassette tape" by Poly by Google, CC BY 3.0 (see
         // models/cassette/license.txt and the credit in index.html)
         model: { file: "models/cassette/cassette.glb" },
         facts: "Music.",
+        // clicking the cassette a second time plays this video in the popup
+        // (the background music pauses while it's open)
+        cvLink: "https://www.youtube.com/embed/-JZkoMYRwHQ?autoplay=1",
+        externalLink: "https://www.youtube.com/watch?v=-JZkoMYRwHQ",
+        linkLabel: "Play ↗",
       },
     ],
   },
@@ -133,28 +139,29 @@ export const BODIES = [
     moons: [
       {
         name: "Luca Fontaine",
-        radius: 0.25,
+        radius: 0.32,
         orbitRadius: 2.4,
         orbitSpeed: 0.45,
         orbitTilt: 0.4, // ~23°
-        rotationSpeed: 0.02,
+        rotationSpeed: 0.04, // spins on Y...
+        rotationSpeedX: 0.03, // ...and on X, so it tumbles
         // "CC0 - Clapperboard" by plaggy, CC BY 4.0 (see
         // models/clapperboard/license.txt and the credit in index.html)
-        model: { file: "models/clapperboard/scene.gltf", lighten: 0.25 },
+        model: { file: "models/clapperboard/scene.gltf", lighten: 0.38, thicken: 2.5 },
         facts: "Luca Fontaine, actor.\nPortfolio site with headshots, résumé, photo gallery, coaching and contact.",
         cvLink: "https://lunistache.github.io/luca-fontaine/index.html",
         linkLabel: "Visit website ↗",
       },
       {
         name: "Bleue Frog",
-        radius: 0.25,
+        radius: 0.32,
         orbitRadius: 3.4,
         orbitSpeed: 0.3,
         rotationSpeed: 0.02,
         orbitTilt: -0.55, // ~-32°
         // "Frog" by jeremy, CC BY 3.0 (see models/frog/license.txt and the
         // credit in index.html) — its green body material repainted blue
-        model: { file: "models/frog/frog.glb", recolor: { "4CAF50": "#2f6fe0" } },
+        model: { file: "models/frog/frog.glb", recolor: { "4CAF50": "#3a7aea" } },
         facts: "Bleue Frog. Paris creative production collective:\nfilm production, an upcoming record label, and events.",
         cvLink: "https://lunistache.github.io/bleuefrog/",
         linkLabel: "Visit website ↗",
