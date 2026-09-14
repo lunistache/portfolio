@@ -54,7 +54,7 @@ slider.addEventListener("input", () => {
 muteBtn.addEventListener("click", () => {
   if (volume() === 0) {
     // muted by the slider being at 0: unmuting brings back a default level
-    slider.value = 10;
+    slider.value = 5;
     muted = false;
   } else {
     muted = !muted;

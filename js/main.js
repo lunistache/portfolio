@@ -5,7 +5,7 @@ import { BODIES, DWARF_BODIES } from "./data.js?v=9";
 import { getBodyTextures, getRingTexture, getMoonTexture } from "./textures.js";
 import { createStarfield, ShootingStars } from "./starfield.js";
 import { loadModelMesh } from "./models.js?v=3";
-import { pauseMusic, resumeMusic } from "./music.js?v=5";
+import { pauseMusic, resumeMusic } from "./music.js?v=6";
 
 const ALL_BODIES = [...BODIES, ...DWARF_BODIES];
 
