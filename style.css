@@ -1,0 +1,645 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#scene {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 32px 120px 60px 40px;
+  color: #ffffff;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  z-index: 5;
+  /* scrim so text stays legible over any planet, bright or dark */
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.28) 45%,
+    rgba(0, 0, 0, 0) 75%
+  );
+}
+
+#planet-name {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#planet-subtitle {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9fb0e0;
+}
+
+#planet-subtitle:empty {
+  display: none;
+}
+
+#planet-facts {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #e7ecff;
+  max-width: 620px; /* wide enough that each "\n"-separated sentence fits on one line */
+  line-height: 1.55;
+  white-space: pre-line; /* honor "\n" in a body's facts */
+}
+
+#planet-facts:empty {
+  display: none;
+}
+
+#nav-help {
+  margin: 12px 0 0;
+  padding: 0 0 0 18px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #e7ecff;
+  max-width: 360px;
+  line-height: 1.5;
+}
+
+#nav-help li {
+  margin-bottom: 6px;
+}
+
+#nav-help strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+#cv-link {
+  display: none;
+  margin-top: 14px;
+  pointer-events: auto;
+  color: #0a0a10;
+  background: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+#cv-link:hover {
+  background: #cfe0ff;
+}
+
+#cv-link.visible {
+  display: inline-block;
+}
+
+#menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 36px;
+  z-index: 10;
+  /* scrim so menu text stays legible over any planet, bright or dark */
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.3) 55%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
+
+#planet-list {
+  pointer-events: auto;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+}
+
+#planet-list li {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 8px 4px;
+  cursor: pointer;
+  opacity: 0.72;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  position: relative;
+}
+
+#planet-list li:hover {
+  opacity: 1;
+  transform: translateX(-4px);
+}
+
+.overview-item {
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em !important;
+  color: #b7c0e0 !important;
+  margin-bottom: 10px;
+  padding-bottom: 14px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.overview-item.active {
+  color: #ffffff !important;
+}
+
+#planet-list li.active {
+  opacity: 1;
+  font-weight: 700;
+  transform: translateX(-10px);
+}
+
+#planet-list li.active::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+}
+
+.dwarf-header {
+  font-size: 0.68rem !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em !important;
+  color: rgba(255, 255, 255, 0.35) !important;
+  opacity: 1 !important;
+  cursor: default !important;
+  padding-top: 10px !important;
+  padding-bottom: 0 !important;
+}
+
+.dwarf-header:hover {
+  transform: none !important;
+}
+
+.dwarf-item {
+  font-size: 0.88rem !important;
+  opacity: 0.6;
+}
+
+.moon-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+#planet-list li.expanded > .moon-list {
+  max-height: 240px;
+}
+
+.moon-item {
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  opacity: 0.55;
+  padding: 5px 4px !important;
+}
+
+.moon-item:hover {
+  opacity: 0.9 !important;
+}
+
+.moon-item.active {
+  opacity: 1 !important;
+}
+
+.planet-label {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#controls {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  align-items: stretch;
+  gap: 22px;
+  padding: 8px 20px 10px;
+  border-radius: 16px;
+  background: rgba(10, 10, 16, 0.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: bottom 0.2s ease;
+}
+
+/* when the credits are expanded, lift the controls above them
+   (--credit-h is kept in sync by the script in index.html) */
+body.credits-open #controls {
+  bottom: calc(14px + var(--credit-h, 0px) + 10px);
+}
+
+/* each control: its name on top, the switch or slider under it */
+.control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.control-label {
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+.control-slider {
+  width: 90px;
+  accent-color: #8fb5ff;
+  cursor: pointer;
+}
+
+/* checkbox drawn as an on/off sliding switch */
+.switch {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 34px;
+  height: 18px;
+  margin: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.switch:checked {
+  background: #8fb5ff;
+}
+
+.switch:checked::before {
+  transform: translateX(16px);
+}
+
+.switch:focus-visible,
+.control-slider:focus-visible {
+  outline: 2px solid #8fb5ff;
+  outline-offset: 2px;
+}
+
+#cv-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#cv-modal[hidden] {
+  display: none;
+}
+
+#cv-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+#cv-modal-panel {
+  position: relative;
+  width: min(900px, 94vw);
+  height: min(1100px, 90vh);
+  background: #17171c;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#cv-modal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 10px 14px;
+  background: #0e0e12;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#cv-modal-download {
+  color: #8fb5ff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+#cv-modal-download:hover {
+  text-decoration: underline;
+}
+
+#cv-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+#cv-modal-close:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#cv-modal-frame {
+  flex: 1;
+  border: none;
+  background: #ffffff;
+}
+
+@media (max-width: 700px) {
+  #cv-modal-panel {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+}
+
+#credit {
+  position: fixed;
+  bottom: 14px;
+  left: 40px;
+  right: 40px;
+  z-index: 5;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+#credit a {
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: auto;
+}
+
+#credit-toggle {
+  pointer-events: auto;
+  background: none;
+  border: none;
+  padding: 0 6px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-block;
+  transform: rotate(180deg);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+#credit-toggle:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+#credit.collapsed #credit-toggle {
+  transform: rotate(0deg);
+}
+
+#credit.collapsed #credit-text {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  #credit {
+    left: 20px;
+    right: 20px;
+    font-size: 0.6rem;
+  }
+  #hud {
+    padding: 20px 60px 40px 20px;
+  }
+  #planet-name {
+    font-size: 1.7rem;
+  }
+  #planet-facts,
+  #nav-help {
+    max-width: 220px;
+  }
+  #menu {
+    width: 190px;
+    padding-right: 16px;
+  }
+  #planet-list li {
+    font-size: 0.8rem;
+  }
+  #controls {
+    gap: 8px;
+    padding: 6px 12px;
+    max-width: calc(100vw - 40px);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .control-label {
+    font-size: 0.62rem;
+  }
+  .control-slider {
+    width: 60px;
+  }
+}
+
+/* hidden YouTube player for the background music (see js/music.js) */
+#music-player {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- welcome screen ---------- */
+
+#welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(ellipse at center, rgba(8, 10, 22, 0.72) 0%, rgba(0, 0, 0, 0.92) 100%);
+  backdrop-filter: blur(3px);
+  transition: opacity 0.4s ease;
+}
+
+#welcome[hidden] {
+  display: none;
+}
+
+#welcome.closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#welcome-panel {
+  max-width: 520px;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  color: #e7ecff;
+  text-align: center;
+}
+
+#welcome-title {
+  color: #ffffff;
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#welcome-role {
+  margin-top: 4px;
+  color: #9fb0e0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#welcome-intro {
+  margin-top: 22px;
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+#welcome-steps {
+  margin: 20px auto 0;
+  padding: 16px 20px 16px 36px;
+  max-width: 440px;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#welcome-steps li + li {
+  margin-top: 6px;
+}
+
+#welcome-steps strong {
+  color: #ffffff;
+}
+
+#welcome-enter {
+  margin-top: 26px;
+  padding: 12px 34px;
+  border: none;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0a0a10;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#welcome-enter:hover {
+  background: #cfe0ff;
+  transform: translateY(-1px);
+}
+
+#welcome-enter:focus-visible {
+  outline: 2px solid #8fb5ff;
+  outline-offset: 3px;
+}
+
+#welcome-note {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 700px) {
+  #welcome-title {
+    font-size: 1.7rem;
+  }
+  #welcome-intro {
+    font-size: 0.88rem;
+  }
+  #welcome-steps {
+    font-size: 0.8rem;
+    padding: 12px 14px 12px 28px;
+  }
+}

@@ -1,0 +1,8 @@
+Model Information:
+* title:	Cassette tape
+* source:	https://poly.pizza/m/aR5ot8Z7_-v
+* author:	Poly by Google
+
+Model License:
+* license type:	CC-BY-3.0 (https://creativecommons.org/licenses/by/3.0/)
+* requirements:	Author must be credited. Commercial use is allowed.

@@ -1,0 +1,9 @@
+Model Information:
+* title:	Frog
+* source:	https://poly.pizza/m/07-wJ9bkzul
+* author:	jeremy
+
+Model License:
+* license type:	CC-BY-3.0 (https://creativecommons.org/licenses/by/3.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+* modifications:	body color changed from green to blue.

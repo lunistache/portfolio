@@ -1,0 +1,8 @@
+Model Information:
+* title:	Laptop
+* source:	https://poly.pizza/m/UGOWjMUC5U
+* author:	J-Toastie
+
+Model License:
+* license type:	CC-BY-3.0 (https://creativecommons.org/licenses/by/3.0/)
+* requirements:	Author must be credited. Commercial use is allowed.

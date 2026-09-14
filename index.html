@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nicola Fontaine - Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css?v=18" />
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <!-- welcome screen: explains the site, and its "Enter" click is what lets
+       the browser start the background music (see js/music.js) -->
+  <div id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+    <div id="welcome-panel">
+      <h1 id="welcome-title">Nicola Fontaine</h1>
+      <p id="welcome-role">Data Engineer &amp; Analyst</p>
+      <p id="welcome-intro">
+        Welcome to my portfolio. It's a small solar system: each planet is a part of my work,
+        and the moons around it are the things inside.
+      </p>
+      <ul id="welcome-steps">
+        <li><strong>Click a planet</strong> to fly to it and read about it.</li>
+        <li><strong>Click a moon</strong>, then click it again to open it: my CV, or a live website.</li>
+        <li><strong>Drag</strong> to look around and <strong>scroll</strong> to zoom.</li>
+        <li><strong>The bar at the bottom</strong> sets the camera, the orbits, the music volume and the speed.</li>
+      </ul>
+      <button id="welcome-enter" type="button">Enter ♪</button>
+      <p id="welcome-note">This site plays music. Turn it down with the Music slider.</p>
+    </div>
+  </div>
+
+  <div id="hud">
+    <div id="planet-info">
+      <h1 id="planet-name">Portfolio</h1>
+      <p id="planet-subtitle"></p>
+      <p id="planet-facts"></p>
+      <ul id="nav-help" hidden>
+        <li><strong>Click a planet</strong> (or pick it in the menu on the right) to fly to it and read about it.</li>
+        <li>Planets have <strong>moons</strong>. Click one to see what it is.</li>
+        <li><strong>Click a moon again</strong> to open it: the CV, or a live website.</li>
+        <li><strong>Drag</strong> to look around, <strong>scroll</strong> to zoom, <strong>right-drag</strong> to pan.</li>
+        <li><strong>Overview</strong> in the menu brings you back here.</li>
+        <li><strong>Auto Camera</strong> lets the view drift on its own, <strong>Orbits</strong> shows the orbit lines, <strong>Music</strong> sets the volume and <strong>Speed</strong> changes how fast things orbit.</li>
+      </ul>
+      <a id="cv-link" href="cv.pdf" target="_blank" rel="noopener">View full CV ↗</a>
+    </div>
+  </div>
+
+  <div id="cv-modal" hidden>
+    <div id="cv-modal-backdrop"></div>
+    <div id="cv-modal-panel">
+      <div id="cv-modal-bar">
+        <a id="cv-modal-download" href="cv.pdf" target="_blank" rel="noopener">Open in new tab ↗</a>
+        <button id="cv-modal-close" type="button" aria-label="Close CV">✕</button>
+      </div>
+      <iframe id="cv-modal-frame" title="Nicola Fontaine CV" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <nav id="menu">
+    <ul id="planet-list"></ul>
+  </nav>
+
+  <div id="controls">
+    <label class="control">
+      <span class="control-label">Auto Camera</span>
+      <input type="checkbox" id="camera-toggle" class="switch" />
+    </label>
+    <label class="control">
+      <span class="control-label">Orbits</span>
+      <input type="checkbox" id="orbits-toggle" class="switch" checked />
+    </label>
+    <label class="control">
+      <span class="control-label">Music</span>
+      <input type="range" id="volume-slider" class="control-slider" min="0" max="100" step="1" value="10" autocomplete="off" />
+    </label>
+    <label class="control">
+      <span class="control-label">Speed</span>
+      <input type="range" id="speed-slider" class="control-slider" min="0" max="3" step="0.25" value="1" />
+    </label>
+  </div>
+
+  <div id="credit" class="collapsed">
+    <button id="credit-toggle" type="button" aria-expanded="false" aria-controls="credit-text" title="Show credits">▶</button>
+    <span id="credit-text">
+    Textures: NASA imagery via
+    <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a>
+    (CC BY 4.0) ·
+    <a href="https://sketchfab.com/3d-models/3d-model-bust-33ec96ea65df4ab896486904a9dfba99" target="_blank" rel="noopener">Bust by GR-video</a>
+    (CC BY 4.0) ·
+    <a href="https://poly.pizza/m/arIYNl9gMyr" target="_blank" rel="noopener">Scroll by Poly by Google</a>
+    (CC BY 3.0) ·
+    <a href="https://poly.pizza/m/aR5ot8Z7_-v" target="_blank" rel="noopener">Cassette tape by Poly by Google</a>
+    (CC BY 3.0) ·
+    <a href="https://poly.pizza/m/UGOWjMUC5U" target="_blank" rel="noopener">Laptop by J-Toastie</a>
+    (CC BY 3.0) ·
+    <a href="https://poly.pizza/m/1L9oJAw6nY2" target="_blank" rel="noopener">Phone by Alex Safayan</a>
+    (CC BY 3.0) ·
+    <a href="https://sketchfab.com/3d-models/cc0-clapperboard-b541acf3a4f040f98b1bbf4137a66d09" target="_blank" rel="noopener">Clapperboard by plaggy</a>
+    (CC BY 4.0) ·
+    <a href="https://poly.pizza/m/07-wJ9bkzul" target="_blank" rel="noopener">Frog by jeremy</a>
+    (CC BY 3.0, recolored)
+    </span>
+  </div>
+  <script>
+    (function () {
+      const welcome = document.getElementById("welcome");
+      const enter = document.getElementById("welcome-enter");
+      enter.focus();
+      const close = () => {
+        welcome.classList.add("closing");
+        setTimeout(() => { welcome.hidden = true; }, 400);
+      };
+      enter.addEventListener("click", close);
+      window.addEventListener("keydown", (evt) => {
+        if (!welcome.hidden && (evt.key === "Enter" || evt.key === "Escape")) close();
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const credit = document.getElementById("credit");
+      const btn = document.getElementById("credit-toggle");
+      const syncHeight = () =>
+        document.body.style.setProperty("--credit-h", credit.offsetHeight + "px");
+      new ResizeObserver(syncHeight).observe(credit);
+      btn.addEventListener("click", () => {
+        const collapsed = credit.classList.toggle("collapsed");
+        document.body.classList.toggle("credits-open", !collapsed);
+        btn.setAttribute("aria-expanded", String(!collapsed));
+        btn.title = collapsed ? "Show credits" : "Hide credits";
+      });
+    })();
+  </script>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="js/main.js?v=49"></script>
+</body>
+</html>

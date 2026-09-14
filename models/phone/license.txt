@@ -1,0 +1,8 @@
+Model Information:
+* title:	Phone
+* source:	https://poly.pizza/m/1L9oJAw6nY2
+* author:	Alex Safayan
+
+Model License:
+* license type:	CC-BY-3.0 (https://creativecommons.org/licenses/by/3.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
