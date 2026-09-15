@@ -52,17 +52,31 @@ controls.autoRotateSpeed = 0.05;
 
 // ---------- lighting ----------
 
-scene.add(new THREE.AmbientLight(0xffffff, 0.22));
-const sunLight = new THREE.PointLight(0xffffff, 2.4, 0, 0); // radiates from the Sun's position
+const AMBIENT_INTENSITY = 0.22;
+const SUN_INTENSITY = 2.4;
+const RIM_INTENSITY = 0.15;
+const ambientLight = new THREE.AmbientLight(0xffffff, AMBIENT_INTENSITY);
+scene.add(ambientLight);
+const sunLight = new THREE.PointLight(0xffffff, SUN_INTENSITY, 0, 0); // radiates from the Sun's position
 sunLight.castShadow = true;
 sunLight.shadow.mapSize.set(1024, 1024);
 sunLight.shadow.camera.near = 0.5;
 sunLight.shadow.camera.far = SYSTEM_RADIUS * 2.5;
 sunLight.shadow.bias = -0.0015;
 scene.add(sunLight);
-const rimLight = new THREE.DirectionalLight(0x6f8fff, 0.15);
+const rimLight = new THREE.DirectionalLight(0x6f8fff, RIM_INTENSITY);
 rimLight.position.set(-6, -2, -4);
 scene.add(rimLight);
+
+// the "Luminosity" slider in the bottom controls scales every light together
+function setLuminosity(level) {
+  ambientLight.intensity = AMBIENT_INTENSITY * level;
+  sunLight.intensity = SUN_INTENSITY * level;
+  rimLight.intensity = RIM_INTENSITY * level;
+}
+document.getElementById("luminosity-slider").addEventListener("input", (evt) => {
+  setLuminosity(parseFloat(evt.target.value));
+});
 
 // ---------- background ----------
 

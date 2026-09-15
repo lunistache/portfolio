@@ -39,7 +39,7 @@
         <li><strong>Click a planet</strong> to fly to it and read about it.</li>
         <li><strong>Click a moon</strong>, then click it again to open it: my CV, or a live website.</li>
         <li><strong>Drag</strong> to look around and <strong>scroll</strong> to zoom.</li>
-        <li><strong>The bar at the bottom</strong> sets the camera, the orbits, the music volume and the speed.</li>
+        <li><strong>The bar at the bottom</strong> sets the camera, the orbits, the music volume, the luminosity and the speed.</li>
       </ul>
       <button id="welcome-enter" type="button">Enter ♪</button>
       <p id="welcome-note">This site plays music. Mute it or turn it down in the bar at the bottom.</p>
@@ -57,7 +57,7 @@
         <li><strong>Click a moon again</strong> to open it: the CV, or a live website.</li>
         <li><strong>Drag</strong> to look around, <strong>scroll</strong> to zoom, <strong>right-drag</strong> to pan.</li>
         <li><strong>Overview</strong> in the menu brings you back here.</li>
-        <li><strong>Auto Camera</strong> lets the view drift on its own, <strong>Orbits</strong> shows the orbit lines, <strong>Music</strong> sets the volume and <strong>Speed</strong> changes how fast things orbit.</li>
+        <li><strong>Auto Camera</strong> lets the view drift on its own, <strong>Orbits</strong> shows the orbit lines, <strong>Music</strong> sets the volume, <strong>Luminosity</strong> brightens or dims the lighting and <strong>Speed</strong> changes how fast things orbit.</li>
       </ul>
       <a id="cv-link" href="cv.pdf" target="_blank" rel="noopener">View full CV ↗</a>
     </div>
@@ -94,6 +94,10 @@
       </div>
       <input type="range" id="volume-slider" class="control-slider" min="0" max="100" step="1" value="5" autocomplete="off" />
     </div>
+    <label class="control">
+      <span class="control-label">Luminosity</span>
+      <input type="range" id="luminosity-slider" class="control-slider" min="0.25" max="3" step="0.05" value="1" autocomplete="off" />
+    </label>
     <label class="control">
       <span class="control-label">Speed</span>
       <input type="range" id="speed-slider" class="control-slider" min="0" max="3" step="0.25" value="1" />
@@ -165,6 +169,6 @@
       }
     }
   </script>
-  <script type="module" src="js/main.js?v=59"></script>
+  <script type="module" src="js/main.js?v=60"></script>
 </body>
 </html>
