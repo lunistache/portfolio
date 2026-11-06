@@ -1041,6 +1041,16 @@ cameraToggle.addEventListener("change", () => {
   if (!cameraLocked) autoRotateEnabled = true;
 });
 
+// ---------- reset view ----------
+
+// back to the view you get when arriving on the site: leaves the focused
+// planet/moon if any, otherwise just flies back from wherever you dragged to
+document.getElementById("reset-view").addEventListener("click", () => {
+  if (isFlying) return;
+  if (focusedId) focusOn(null);
+  else flyTo(overviewPose());
+});
+
 // ---------- orbits toggle ----------
 
 const orbitsToggle = document.getElementById("orbits-toggle");

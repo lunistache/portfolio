@@ -282,6 +282,32 @@ body.credits-open #controls {
   bottom: calc(14px + var(--credit-h, 0px) + 10px);
 }
 
+#reset-view {
+  align-self: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0a0a10;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#reset-view:hover {
+  background: #cfe0ff;
+  transform: translateY(-1px);
+}
+
+#reset-view:focus-visible {
+  outline: 2px solid #8fb5ff;
+  outline-offset: 3px;
+}
+
 /* each control: its name on top, the switch or slider under it */
 .control {
   display: flex;
@@ -566,6 +592,10 @@ body.credits-open #controls {
   }
   .control-label {
     font-size: 0.62rem;
+  }
+  #reset-view {
+    padding: 6px 12px;
+    font-size: 0.7rem;
   }
   .control-slider {
     width: 60px;
