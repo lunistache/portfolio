@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CSS2DRenderer, CSS2DObject } from "three/addons/renderers/CSS2DRenderer.js";
-import { BODIES, DWARF_BODIES } from "./data.js?v=9";
+import { BODIES, DWARF_BODIES } from "./data.js?v=11";
 import { getBodyTextures, getRingTexture, getMoonTexture } from "./textures.js";
 import { createStarfield, ShootingStars } from "./starfield.js";
 import { loadModelMesh } from "./models.js?v=3";
@@ -473,6 +473,7 @@ for (const body of ALL_BODIES) {
       radius: m.radius,
       hoverRadius: m.atmosphere ? m.radius * 1.1 : m.radius,
       cvLink: m.cvLink || null,
+      cvVersions: m.cvVersions || null,
       linkLabel: m.linkLabel,
       getWorldPosition: () => {
         const v = new THREE.Vector3();
@@ -575,10 +576,46 @@ const cvModalEl = document.getElementById("cv-modal");
 const cvModalFrame = document.getElementById("cv-modal-frame");
 const cvModalDownload = document.getElementById("cv-modal-download");
 const cvModalClose = document.getElementById("cv-modal-close");
+const cvModalLangs = document.getElementById("cv-modal-langs");
+
+// remembered across openings so switching to FR keeps FR next time
+let cvLang = null;
+
+// language buttons in the popup bar, for targets with several CV versions
+function renderCvLangs(versions) {
+  cvModalLangs.replaceChildren();
+  cvModalLangs.hidden = !versions || versions.length < 2;
+  if (cvModalLangs.hidden) return;
+  versions.forEach((v) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = v.lang;
+    btn.classList.toggle("active", v.lang === cvLang);
+    btn.addEventListener("click", () => {
+      cvLang = v.lang;
+      cvModalFrame.src = v.link;
+      cvModalDownload.href = v.link;
+      cvModalLangs.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
+    });
+    cvModalLangs.appendChild(btn);
+  });
+}
+
+function pickCvVersion(versions) {
+  if (!cvLang) {
+    const browser = (navigator.language || "en").slice(0, 2).toUpperCase();
+    cvLang = versions.some((v) => v.lang === browser) ? browser : versions[0].lang;
+  }
+  return versions.find((v) => v.lang === cvLang) || versions[0];
+}
 
 // `externalLink` is what "Open in new tab" points to when it differs from the
 // embeddable URL (e.g. a YouTube embed vs. its normal watch page)
-function openCvModal(link, externalLink = link) {
+function openCvModal(link, externalLink = link, versions = null) {
+  if (versions && versions.length) {
+    link = externalLink = pickCvVersion(versions).link;
+  }
+  renderCvLangs(versions);
   cvModalFrame.src = link;
   cvModalDownload.href = externalLink;
   cvModalEl.hidden = false;
@@ -602,7 +639,11 @@ cvLinkEl.addEventListener("click", (evt) => {
   evt.preventDefault();
   const target = focusedId && focusables.get(focusedId);
   if (target?.cvLink) openCv(target);
-  else openCvModal(cvLinkEl.href);
+  else {
+    // welcome screen: open the CV moon's versions so the language switcher shows
+    const cvMoon = BODIES.flatMap((b) => b.moons || []).find((m) => m.cvVersions);
+    openCvModal(cvLinkEl.href, cvLinkEl.href, cvMoon?.cvVersions);
+  }
 });
 
 const overviewLi = document.createElement("li");
@@ -736,7 +777,7 @@ function flyTo(pose, duration = 1.1) {
 }
 
 function openCv(target) {
-  if (target?.cvLink) openCvModal(target.cvLink, target.externalLink);
+  if (target?.cvLink) openCvModal(target.cvLink, target.externalLink, target.cvVersions);
 }
 
 function focusOn(id) {

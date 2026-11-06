@@ -15,11 +15,6 @@ export const BODIES = [
     isStar: true,
     texture: { file: "textures/2k_sun.jpg" },
     facts: "",
-    // clicking the Sun a second time pops this video up, starting at 0:18;
-    // "Open in new tab" goes to the normal YouTube page at the same moment
-    cvLink: "https://www.youtube.com/embed/rDQO0nxfnhI?start=18&autoplay=1",
-    externalLink: "https://youtu.be/rDQO0nxfnhI?t=18",
-    linkLabel: "Watch video ↗",
     moons: [],
   },
   {
@@ -49,7 +44,15 @@ export const BODIES = [
         // and the credit in index.html)
         model: { file: "models/scroll/scroll.glb" },
         facts: "Data Engineer & Analyst.\nPython, SQL, Azure/Databricks, Power BI, ETL pipelines, dashboards, ML.",
-        cvLink: "cv.pdf",
+        cvLink: "cv/CV_Nicola_Fontaine_EN.pdf",
+        // same CV in 4 languages: the popup shows a switcher for these
+        // (the one matching the visitor's browser language is picked first)
+        cvVersions: [
+          { lang: "EN", link: "cv/CV_Nicola_Fontaine_EN.pdf" },
+          { lang: "FR", link: "cv/CV_Nicola_Fontaine_FR.pdf" },
+          { lang: "IT", link: "cv/CV_Nicola_Fontaine_IT.pdf" },
+          { lang: "ES", link: "cv/CV_Nicola_Fontaine_ES.pdf" },
+        ],
       },
       {
         name: "Music",
