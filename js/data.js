@@ -193,6 +193,8 @@ export const BODIES = [
           },
         },
         facts: "Panzon. Italian food from Venice.\nTiramisu to order and pasta-making classes.",
+        cvLink: "https://lunistache.github.io/panzon/",
+        linkLabel: "Visit website ↗",
       },
     ],
   },
